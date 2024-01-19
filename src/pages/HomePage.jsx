@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getPokemons, getPokemon } from '../services/pokemonService'
+import { getPokemons, getPokemon, getPokemonPdf } from '../services/pokemonService'
 import { PokemonDrawer } from '../components/PokemonDrawer'
 import { PokemonCard } from '../components/PokemonCard';
 
@@ -29,7 +29,7 @@ export const HomePage = () => {
     }
 
     const downloadPokemon = async () => {
-        console.log('dowload');
+        await getPokemonPdf(chosenPokemon.id, chosenPokemon.name);
     }
 
     useEffect(() => {
