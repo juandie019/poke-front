@@ -1,7 +1,7 @@
 export const PokemonCard = ({ pokemon, onCatchPokemon }) => {
     return (
         <>
-            <div className="card padding-md margin-md">
+            <div className="card padding-md my-md">
                 <div>
 
                 <img src={pokemon.image} width="200" height="200" />

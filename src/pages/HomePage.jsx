@@ -1,40 +1,32 @@
-import { useEffect, useState } from 'react';
-import { getPokemons, getPokemon, getPokemonPdf } from '../services/pokemonService'
+import { usePokemonsFetch } from '../hooks/usePokemonsFetch';
+import { usePokemonFetch } from '../hooks/usePokemonFetch';
+
+import { getPokemonPdf } from '../services/pokemonService'
+
 import { PokemonDrawer } from '../components/PokemonDrawer'
 import { PokemonCard } from '../components/PokemonCard';
 
 export const HomePage = () => {
-    const [pokemons, setPokemons] = useState([]);
-    const [chosenPokemon, setChosenPokemon] = useState(null);
+    const {
+        pokemons,
+        pagintation,
+        loadingPokemons,
+        searchTerm,
+        pokemonsError,
+        setChangePage,
+        setSearchTerm,
+    } = usePokemonsFetch();
 
-    const [pagintation, setPagination] = useState({ page: 0, next: false, previous: false });
-    
-    const [loadingPokemons, setLoadingPokemons] = useState(false);
-    const [changePage, setChangePage] = useState(0);
-    const [searchTerm, setSearchTerm] = useState('');
-
-    const fetchPokemons = async (page) => {
-        setLoadingPokemons(true);
-        
-        const pokemonsData = await getPokemons(page, searchTerm);
-        setPokemons(pokemonsData.pokemons);
-        setPagination(pokemonsData.pagination); 
-
-        setLoadingPokemons(false);
-    }
-
-    const fetchPokemon = async (nameOrId) => {
-        const pokemon = await getPokemon(nameOrId);
-        setChosenPokemon(pokemon);
-    }
+    const  {
+        chosenPokemon,
+        fetchPokemon,
+        loadingPokemon,
+        pokemonError
+    } = usePokemonFetch()
 
     const downloadPokemon = async () => {
         await getPokemonPdf(chosenPokemon.id, chosenPokemon.name);
     }
-
-    useEffect(() => {
-        fetchPokemons(changePage);
-    }, [changePage, searchTerm])
 
     return (
         <>
@@ -51,10 +43,16 @@ export const HomePage = () => {
                 />
 
                 {/* right side */}
-                <div>
-                    <input className='margin-md padding' placeholder='Search' value={searchTerm} onChange={e => setSearchTerm(e.target.value)}></input>
+                <div className='margin-md'>
+                    <input className='padding' placeholder='Search' value={searchTerm} onChange={e => setSearchTerm(e.target.value)}></input>
                     {
                         chosenPokemon && <PokemonCard pokemon={chosenPokemon} onCatchPokemon={downloadPokemon}/> 
+                    }
+                    {
+                        loadingPokemon && <div>Cargando pokemon...</div>  
+                    }
+                    {
+                        (pokemonError || pokemonsError) && <div className='error-card my-md'>Sucedio un error al cargar la información</div>
                     }
                 </div>
             </div>
