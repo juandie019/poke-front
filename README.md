@@ -15,11 +15,18 @@ Currently, two official plugins are available:
 npm install
 ```
 
+## Before run
+
+Create a .env following the .env.example struture
+Note: API_URL should be the url where the backend is runing see 1.0
+
 ### Compiles and hot-reloads for development
 
 ```
 npm run dev
 ```
+
+### 1.0 backend project
 
 You will need to run this backend on your machine:
 https://github.com/juandie019/poke-back
